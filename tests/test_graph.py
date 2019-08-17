@@ -1,6 +1,6 @@
 from hypothesis import given
 from hypothesis import strategies as st
-from graph import HeightGraph
+from flow.graph import HeightGraph
 
 
 @st.composite
