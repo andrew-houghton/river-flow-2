@@ -24,3 +24,11 @@ def test_convert_to_graph(height_map):
 
     print(height_map)
     print(len(g))
+
+def check_connected(graph, height_map):
+    for y, row in enumerate(height_map):
+        for x, item in enumerate(row):
+            if x>0:
+                assert graph.has_edge((x,y), (x-1,y))
+            if y>0:
+                assert graph.has_edge((x,y), (x,y-1))
