@@ -33,8 +33,6 @@ def test_convert_to_graph(height_map):
 
 def check_nodes_have_height(graph):
     for node in graph.nodes:
-        print(node)
-        print(graph[node])
         assert type(graph.nodes[node]['height']) == int
 
 
