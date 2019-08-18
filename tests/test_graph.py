@@ -1,4 +1,4 @@
-from hypothesis import given
+from hypothesis import given, example
 from hypothesis import strategies as st
 from flow.graph import HeightGraph
 
@@ -15,20 +15,33 @@ def test_heightmap_strategy(height_map):
     assert type(height_map) == list
     assert type(height_map[0]) == list
     assert type(height_map[0][0]) == int
-    assert len({len(i) for i in height_map}) == 1 # Only on size for rows
+    assert len({len(i) for i in height_map}) == 1  # Only on size for rows
 
 
 @given(height_map_strategy())
+@example(height_map=[[0, 0]])
 def test_convert_to_graph(height_map):
     g = HeightGraph(height_map)
 
-    print(height_map)
-    print(len(g))
+    assert len(g) > 0
+    check_connected(g, height_map)
+
+    g.merge_equal_height_nodes()
+
+    # check_no_equal_height_edges(g)
+
 
 def check_connected(graph, height_map):
-    for y, row in enumerate(height_map):
-        for x, item in enumerate(row):
-            if x>0:
-                assert graph.has_edge((x,y), (x-1,y))
-            if y>0:
-                assert graph.has_edge((x,y), (x,y-1))
+    for row_num, row in enumerate(height_map):
+        for col_num, item in enumerate(row):
+            if row_num > 0:
+                assert graph.has_edge((row_num, col_num), (row_num - 1, col_num))
+            if col_num > 0:
+                assert graph.has_edge((row_num, col_num), (row_num, col_num - 1))
+
+
+def check_no_equal_height_edges(graph):
+    for u, v in graph.edges:
+        u_height = graph[u]["height"]
+        v_height = graph[v]["height"]
+        assert u_height != v_height
