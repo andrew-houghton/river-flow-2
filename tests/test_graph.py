@@ -24,16 +24,23 @@ def test_convert_to_graph(height_map):
     g = HeightGraph(height_map)
 
     assert len(g) > 0
+    check_nodes_have_height(g)
     check_connected(g, height_map)
 
     g.merge_equal_height_nodes()
-
     # check_no_equal_height_edges(g)
+
+
+def check_nodes_have_height(graph):
+    for node in graph.nodes:
+        print(node)
+        print(graph[node])
+        assert type(graph.nodes[node]['height']) == int
 
 
 def check_connected(graph, height_map):
     for row_num, row in enumerate(height_map):
-        for col_num, item in enumerate(row):
+        for col_num in range(len(row)):
             if row_num > 0:
                 assert graph.has_edge((row_num, col_num), (row_num - 1, col_num))
             if col_num > 0:
