@@ -8,6 +8,7 @@ class HeightGraph(nx.DiGraph):
         self.width = len(height_map[0])
         nx.generators.lattice.grid_2d_graph(self.height, self.width, create_using=self)
         self._set_node_heights(height_map)
+        self._create_height_order_list()
 
     def _set_node_heights(self, height_map):
         node_heights = {}
@@ -23,7 +24,14 @@ class HeightGraph(nx.DiGraph):
                 if self.nodes[u]["height"] == self.nodes[v]["height"]:
                     self.merge_nodes(u, v)
 
+    def _create_height_order_list(self):
+        height_order_nodes = sorted(self.nodes(), key=lambda x: self.nodes[x]["height"])
+        print("nodes = ")
+        print(height_order_nodes)
+        for node in height_order_nodes:
+            print(f"Node {node} values {self.nodes[node]}")
+
     def merge_nodes(self, u, v):
-        print("merging", u, v)
+        # print("merging", u, v)
         pass
 

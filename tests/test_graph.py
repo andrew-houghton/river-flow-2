@@ -6,7 +6,7 @@ from flow.graph import HeightGraph
 @st.composite
 def height_map_strategy(draw):
     width = draw(st.integers(min_value=1, max_value=200))
-    rows = st.lists(st.integers(), min_size=width, max_size=width)
+    rows = st.lists(st.integers(min_value=-100, max_value=2000), min_size=width, max_size=width)
     return draw(st.lists(rows, min_size=1))
 
 
