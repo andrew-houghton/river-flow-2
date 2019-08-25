@@ -26,8 +26,9 @@ def test_convert_to_graph(height_map):
     assert len(g) > 0
     check_nodes_have_height(g)
     check_connected(g, height_map)
+    check_connected_in_order(g, height_map)
 
-    g.merge_equal_height_nodes()
+    # g.merge_equal_height_nodes()
     # check_no_equal_height_edges(g)
 
 
@@ -50,3 +51,21 @@ def check_no_equal_height_edges(graph):
         u_height = graph[u]["height"]
         v_height = graph[v]["height"]
         assert u_height != v_height
+
+
+def check_connected_in_order(graph, height_map):
+    lowest_height = min([min(r) for r in height_map])
+    highest_height = max([max(r) for r in height_map])
+
+    lowest = graph.lowest_node_key
+    highest = graph.highest_node_key
+
+    assert graph.nodes[lowest]['height'] == lowest_height
+    assert graph.nodes[highest]['height'] == highest_height
+
+    count = 1
+    while graph.nodes[lowest]["next"] != None:
+        lowest = graph.nodes[lowest]["next"]
+        count += 1
+
+    assert count == graph.number_of_nodes()
